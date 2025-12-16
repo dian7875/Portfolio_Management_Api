@@ -5,9 +5,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
-  moduleFormat    = "cjs"
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
@@ -95,9 +95,10 @@ model Project {
 }
 
 model SocialMedia {
-  id           Int    @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   userId       String
   name         String
   redirectLink String
-  user         User   @relation(fields: [userId], references: [id])
+  hidden       Boolean @default(false)
+  user         User    @relation(fields: [userId], references: [id])
 }
