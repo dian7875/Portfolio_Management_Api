@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { EducationModule } from './education/education.module';
 import { SocialMediasModule } from './social-medias/social-medias.module';
 import { LanguagesModule } from './languages/languages.module';
+import { ExperiencesModule } from './experiences/experiences.module';
 
 @Module({
   imports: [
@@ -11,7 +12,8 @@ import { LanguagesModule } from './languages/languages.module';
     AuthModule,
     EducationModule,
     SocialMediasModule,
-    LanguagesModule
+    LanguagesModule,
+    ExperiencesModule
   ],
   controllers: [],
   providers: [],

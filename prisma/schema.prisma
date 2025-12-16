@@ -51,6 +51,7 @@ model Experience {
   startDate        DateTime
   endDate          DateTime?
   description      String?
+  hidden           Boolean   @default(false)
   responsibilities String[]
 
   user User @relation(fields: [userId], references: [id])
