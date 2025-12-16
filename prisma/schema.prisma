@@ -35,11 +35,12 @@ model User {
 }
 
 model Language {
-  id       Int    @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   userId   String
   language String
+  hidden   Boolean @default(false)
   level    String
-  user     User   @relation(fields: [userId], references: [id])
+  user     User    @relation(fields: [userId], references: [id])
 }
 
 model Experience {
