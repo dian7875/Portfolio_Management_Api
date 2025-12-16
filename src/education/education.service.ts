@@ -161,7 +161,6 @@ export class EducationService {
     userId,
   }: EducationFiltersDto) {
     const skip = (page - 1) * limit;
-console.log(userId)
     const where: Prisma.EducationWhereInput = {
       userId,
       ...(hidden !== undefined && { hidden }),
