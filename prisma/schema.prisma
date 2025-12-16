@@ -23,8 +23,8 @@ model User {
   hostUrl      String?
   photoUrl     String?
   cvUrl        String?
-  email        String?
-  phone        String?
+  email        String? @unique
+  phone        String? @unique
 
   experiences  Experience[]
   education    Education[]
