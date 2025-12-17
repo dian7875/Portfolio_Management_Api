@@ -77,8 +77,8 @@ model Skill {
   name     String
   level    Int?
   category String?
-
-  user User @relation(fields: [userId], references: [id])
+  hidden    Boolean @default(false)
+  user     User    @relation(fields: [userId], references: [id])
 }
 
 model Project {
