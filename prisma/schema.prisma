@@ -77,7 +77,7 @@ model Skill {
   name     String
   level    Int?
   category String?
-  hidden    Boolean @default(false)
+  hidden   Boolean @default(false)
   user     User    @relation(fields: [userId], references: [id])
 }
 
@@ -88,12 +88,13 @@ model Project {
   subtitle    String?
   description String?
   imagesUrl   String[]
+  imagesPath  String[]
   repoUrl     String?
   demoUrl     String?
   techStack   String[]
-  timelap     DateTime
-
-  user User @relation(fields: [userId], references: [id])
+  hidden      Boolean  @default(false)
+  finishDate  DateTime
+  user        User     @relation(fields: [userId], references: [id])
 }
 
 model SocialMedia {
