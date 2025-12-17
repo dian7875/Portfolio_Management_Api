@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import { ExperiencesService } from './experiences.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -26,10 +27,7 @@ export class ExperiencesController {
   @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @Post()
-  create(
-    @CurrentUser('id') userId: string,
-    @Body() dto: CreateExperienceDto,
-  ) {
+  create(@CurrentUser('id') userId: string, @Body() dto: CreateExperienceDto) {
     return this.experiencesService.createExperience(userId, dto);
   }
 
@@ -45,7 +43,10 @@ export class ExperiencesController {
 
   @Get()
   findAll(@Query() filters: ExperienceFiltersDto) {
-    return this.experiencesService.getExperiences(filters.userId!, filters);
+    if (!filters.userId) {
+      throw new BadRequestException('userId is required');
+    }
+    return this.experiencesService.getExperiences(filters.userId, filters);
   }
 
   @ApiBearerAuth('access-token')

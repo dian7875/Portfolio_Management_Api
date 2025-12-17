@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import { SkillsService } from './skills.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -38,11 +39,14 @@ export class SkillsController {
   ) {
     return this.skillsService.findAll(userId, filters);
   }
-  
+
   @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @Get('categories')
   getMySkillsCategories(@CurrentUser('id') userId: string) {
+    if (!userId) {
+      throw new BadRequestException('userId is required');
+    }
     return this.skillsService.myCurrentSkillsCategory(userId);
   }
 

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -73,6 +74,9 @@ export class EducationController {
 
   @Get('by-user')
   getEducationByUserId(@Query() filters: EducationFiltersDto) {
+    if (!filters.userId) {
+      throw new BadRequestException('userId is required');
+    }
     return this.educationService.getEducationDegreesByUser({
       ...filters,
     });

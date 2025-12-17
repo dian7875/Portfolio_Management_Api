@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -42,7 +43,10 @@ export class LanguagesController {
 
   @Get()
   findAll(@Query() filters: LanguageFiltersDto) {
-    return this.languagesService.getLanguages(filters.userId!, filters);
+    if (!filters.userId) {
+      throw new BadRequestException('userId is required');
+    }
+    return this.languagesService.getLanguages(filters.userId, filters);
   }
 
   @ApiBearerAuth('access-token')

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -26,7 +27,7 @@ export class SocialMediasController {
   @UseGuards(AuthGuard)
   @Post()
   create(@CurrentUser('id') userId: string, @Body() dto: CreateSocialMediaDto) {
-    console.log(userId,dto)
+    console.log(userId, dto);
     return this.socialMediasService.createRef(userId, dto);
   }
 
@@ -41,10 +42,14 @@ export class SocialMediasController {
   }
 
   @Get()
-  findAll(
-    @Query() filters: SocialMediaFiltersDto,
-  ) {
-    return this.socialMediasService.getSocialMediaRefs(filters.userId!!, filters);
+  findAll(@Query() filters: SocialMediaFiltersDto) {
+    if (!filters.userId) {
+      throw new BadRequestException('userId is required');
+    }
+    return this.socialMediasService.getSocialMediaRefs(
+      filters.userId!!,
+      filters,
+    );
   }
 
   @ApiBearerAuth('access-token')
