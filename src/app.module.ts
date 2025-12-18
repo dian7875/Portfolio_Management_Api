@@ -7,6 +7,7 @@ import { LanguagesModule } from './languages/languages.module';
 import { ExperiencesModule } from './experiences/experiences.module';
 import { SkillsModule } from './skills/skills.module';
 import { ProjectsModule } from './projects/projects.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { ProjectsModule } from './projects/projects.module';
     LanguagesModule,
     ExperiencesModule,
     SkillsModule,
-    ProjectsModule
+    ProjectsModule,
+    UsersModule
   ],
   controllers: [],
   providers: [],

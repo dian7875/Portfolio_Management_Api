@@ -19,10 +19,14 @@ model User {
   passwordHash String
   name         String
   bio          String?
+  title        String?
+  subTitle     String?
   location     String?
   hostUrl      String?
   photoUrl     String?
+  photoPath   String?
   cvUrl        String?
+  cvPath       String?
   email        String? @unique
   phone        String? @unique
 
