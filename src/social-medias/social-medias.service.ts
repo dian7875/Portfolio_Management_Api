@@ -36,7 +36,6 @@ export class SocialMediasService {
           throw new NotFoundException('User not found');
         }
       }
-      console.log(error);
       throw new InternalServerErrorException(
         'Could not create social media reference',
       );

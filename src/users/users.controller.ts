@@ -79,13 +79,11 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Get('me/info')
   getMyBasicInfo(@CurrentUser('id') userId: string) {
-    console.log(userId)
     return this.usersService.getInfo(userId);
   }
 
   @Get(':id')
   getBasicInfo(@Param('id') userId: string) {
-    console.log(userId)
     return this.usersService.getPublicInfo(userId);
   }
 

@@ -27,7 +27,6 @@ export class SocialMediasController {
   @UseGuards(AuthGuard)
   @Post()
   create(@CurrentUser('id') userId: string, @Body() dto: CreateSocialMediaDto) {
-    console.log(userId, dto);
     return this.socialMediasService.createRef(userId, dto);
   }
 
