@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prismaConfig/prisma.service';
-import { Prisma } from 'generated/prisma/client';
+import { Language, Prisma } from 'generated/prisma/client';
 import { LanguageFiltersDto } from './dto/languageFilters.dto';
 import { CreateLanguageDto } from './dto/registerLanguaje.dto';
 import { UpdateLanguageDto } from './dto/updateLanguale.dto';
@@ -107,10 +107,7 @@ export class LanguagesService {
     }
   }
 
-  async hideLanguage(
-    userId: string,
-    id: number,
-  ): Promise<{ message: string }> {
+  async hideLanguage(userId: string, id: number): Promise<{ message: string }> {
     await this.verifyProperty(userId, id);
     await this.changeVisibility(id, true);
     return { message: 'Successful' };
@@ -182,5 +179,21 @@ export class LanguagesService {
         hasPrev: page > 1,
       },
     };
+  }
+
+  async getOneById(id: number): Promise<Language> {
+    const languageData = await this.prisma.language.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!languageData) {
+      throw new NotFoundException(
+        'No existe un lenguage con el id especificado',
+      );
+    }
+
+    return languageData;
   }
 }

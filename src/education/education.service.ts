@@ -183,6 +183,7 @@ export class EducationService {
       meta: {
         page,
         limit,
+        total,
         hasNext: skip + data.length < total,
         hasPrev: page > 1,
       },

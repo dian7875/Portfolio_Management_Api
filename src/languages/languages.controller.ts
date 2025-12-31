@@ -89,4 +89,11 @@ export class LanguagesController {
   ) {
     return this.languagesService.removeLanguage(userId, id);
   }
+
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @Get(':id')
+  getById(@Param('id', ParseIntPipe) id: number) {
+    return this.languagesService.getOneById(id);
+  }
 }
