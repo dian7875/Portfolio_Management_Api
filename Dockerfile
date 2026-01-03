@@ -1,7 +1,7 @@
 # =========================
 # Dependencias
 # =========================
-FROM node:21-alpine3.19 AS deps
+FROM node:22-alpine3.19 AS deps
 WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 RUN npm install
@@ -9,7 +9,7 @@ RUN npm install
 # =========================
 # Builder
 # =========================
-FROM node:21-alpine3.19 AS build
+FROM node:22-alpine3.19 AS build
 WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
@@ -26,7 +26,7 @@ RUN npm ci --only=production && npm cache clean --force
 # =========================
 # Imagen final
 # =========================
-FROM node:21-alpine3.19 AS prod
+FROM node:22-alpine3.19 AS prod
 WORKDIR /usr/src/app
 
 # Copiar node_modules de producción
