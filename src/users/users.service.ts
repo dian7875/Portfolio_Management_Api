@@ -28,7 +28,8 @@ export class UsersService {
       });
 
       return { message: 'Successful' };
-    } catch (error) {
+    } catch (error) {  
+console.error(error)
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('User not found');
@@ -72,7 +73,11 @@ export class UsersService {
         await this.storageService.deleteFile(user.cvPath);
       }
 
-      const upload = await this.storageService.uploadFile(userId, file, 'cv');
+      const upload = await this.storageService.uploadFile(
+        userId,
+        file,
+        `${userId}/cv`,
+      );
 
       await this.prisma.user.update({
         where: { id: userId },
@@ -85,7 +90,8 @@ export class UsersService {
       return {
         message: 'Successful',
       };
-    } catch (error) {
+    } catch (error) {  
+console.error(error)
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('User not found');
@@ -120,7 +126,7 @@ export class UsersService {
       const upload = await this.storageService.uploadFile(
         userId,
         file,
-        'avatars',
+        `${userId}/avatar/`,
       );
 
       await this.prisma.user.update({
@@ -134,7 +140,8 @@ export class UsersService {
       return {
         message: 'Successful',
       };
-    } catch (error) {
+    } catch (error) {  
+console.error(error)
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('User not found');
@@ -163,5 +170,31 @@ export class UsersService {
         hostUrl: true,
       },
     });
+  }
+
+  async getSummary(userId: string) {
+    const [
+      experiencesCount,
+      educationCount,
+      skillsCount,
+      projectsCount,
+      languagesCount,
+      socialMediasCount,
+    ] = await Promise.all([
+      this.prisma.experience.count({ where: { userId } }),
+      this.prisma.education.count({ where: { userId } }),
+      this.prisma.skill.count({ where: { userId } }),
+      this.prisma.project.count({ where: { userId } }),
+      this.prisma.language.count({ where: { userId } }),
+      this.prisma.socialMedia.count({ where: { userId } }),
+    ]);
+    return {
+      experiences: experiencesCount,
+      education: educationCount,
+      skills: skillsCount,
+      projects: projectsCount,
+      languages: languagesCount,
+      socialMedias: socialMediasCount,
+    };
   }
 }

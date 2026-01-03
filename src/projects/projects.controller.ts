@@ -113,7 +113,7 @@ export class ProjectsController {
     @CurrentUser('id') userId: string,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return this.projectsService.removeExperience(userId, id);
+    return this.projectsService.removeProject(userId, id);
   }
 
   @ApiBearerAuth('access-token')
@@ -154,5 +154,12 @@ export class ProjectsController {
     @Body() dto: UpdateProjectDto,
   ) {
     return this.projectsService.updateProject(userId, id, dto, files);
+  }
+
+    @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @Get(':id')
+  getById(@Param('id', ParseIntPipe) id: number) {
+    return this.projectsService.getOneById(id);
   }
 }

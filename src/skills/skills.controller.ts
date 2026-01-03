@@ -95,4 +95,11 @@ export class SkillsController {
   ) {
     return this.skillsService.remove(userId, id);
   }
+
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @Get(':id')
+  getById(@Param('id', ParseIntPipe) id: number) {
+    return this.skillsService.getOneById(id);
+  }
 }

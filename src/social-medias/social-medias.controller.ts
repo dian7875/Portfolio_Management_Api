@@ -91,4 +91,11 @@ export class SocialMediasController {
   ) {
     return this.socialMediasService.removeRef(userId, id);
   }
+
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @Get(':id')
+  getById(@Param('id', ParseIntPipe) id: number) {
+    return this.socialMediasService.getOneById(id);
+  }
 }

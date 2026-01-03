@@ -8,7 +8,7 @@ import {
 import { PrismaService } from 'src/prismaConfig/prisma.service';
 import { CreateSocialMediaDto } from './dto/createRef.dto';
 import { UpdateSocialMediaDto } from './dto/updateRef.dto';
-import { Prisma } from 'generated/prisma/client';
+import { Prisma, SocialMedia } from 'generated/prisma/client';
 import { SocialMediaFiltersDto } from './dto/ref.filter.dto';
 
 @Injectable()
@@ -30,7 +30,8 @@ export class SocialMediasService {
       });
 
       return { message: 'Successful' };
-    } catch (error) {
+    } catch (error) {  
+console.error(error)
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code == 'P2003') {
           throw new NotFoundException('User not found');
@@ -50,7 +51,8 @@ export class SocialMediasService {
           hidden: value,
         },
       });
-    } catch (error) {
+    } catch (error) {  
+console.error(error)
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Social media reference not found');
@@ -94,7 +96,8 @@ export class SocialMediasService {
       });
 
       return { message: 'Successful' };
-    } catch (error) {
+    } catch (error) {  
+console.error(error)
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Social media reference not found');
@@ -128,7 +131,8 @@ export class SocialMediasService {
       });
 
       return { message: 'Successful' };
-    } catch (error) {
+    } catch (error) {  
+console.error(error)
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Social media reference not found');
@@ -155,7 +159,7 @@ export class SocialMediasService {
       this.prisma.socialMedia.findMany({
         where,
         orderBy: {
-          id: 'asc',
+          id: 'desc',
         },
         skip,
         take: limit,
@@ -173,5 +177,20 @@ export class SocialMediasService {
         hasPrev: page > 1,
       },
     };
+  }
+
+  async getOneById(id: number): Promise<SocialMedia> {
+    const sMediaRefData = await this.prisma.socialMedia.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!sMediaRefData) {
+      throw new NotFoundException(
+        'No existe una red social con el id especificado',
+      );
+    }
+    return sMediaRefData;
   }
 }

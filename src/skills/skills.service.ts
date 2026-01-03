@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prismaConfig/prisma.service';
-import { Prisma } from 'generated/prisma/client';
+import { Prisma, Skill } from 'generated/prisma/client';
 import { RegisterSkillDto } from './dto/registerSkill.dto';
 import { UpdateSkillDto } from './dto/updateSkill.dto';
 import { SkillFiltersDto } from './dto/skill.filters.dto';
@@ -27,7 +27,8 @@ export class SkillsService {
       });
 
       return { message: 'Successful' };
-    } catch (error) {
+    } catch (error) {  
+console.error(error)
       throw new InternalServerErrorException('Could not create skill');
     }
   }
@@ -107,14 +108,19 @@ export class SkillsService {
     const where: Prisma.SkillWhereInput = {
       userId,
       ...(hidden !== undefined && { hidden }),
-      ...(category && { category }),
+      ...(category && {
+        category: {
+          contains: category,
+          mode: 'insensitive',
+        },
+      }),
     };
 
     const [data, total] = await Promise.all([
       this.prisma.skill.findMany({
         where,
         orderBy: {
-          id: 'asc',
+          id: 'desc',
         },
         skip,
         take: limit,
@@ -138,13 +144,27 @@ export class SkillsService {
       where: { userId },
       distinct: ['category'],
       orderBy: {
-        category: 'asc',
+        category: 'desc',
       },
       select: {
         category: true,
       },
     });
-    return data.map(item => item.category);
+    return data.map((item) => item.category);
   }
 
+  async getOneById(id: number): Promise<Skill> {
+    const skillData = await this.prisma.skill.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!skillData) {
+      throw new NotFoundException(
+        'No existe una habilidad con el id especificado',
+      );
+    }
+    return skillData;
+  }
 }

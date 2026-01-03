@@ -82,6 +82,13 @@ export class UsersController {
     return this.usersService.getInfo(userId);
   }
 
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @Get('me/summary')
+  getMySummary(@CurrentUser('id') userId: string) {
+    return this.usersService.getSummary(userId);
+  }
+
   @Get(':id')
   getBasicInfo(@Param('id') userId: string) {
     return this.usersService.getPublicInfo(userId);

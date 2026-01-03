@@ -34,7 +34,7 @@ export class StorageService {
       .replace(/\s+/g, '_')
       .replace(/[^a-zA-Z0-9_-]/g, '');
 
-    const finalName = `${userId}_${safeName}${ext}`;
+    const finalName = `${safeName}${ext}`;
     const storagePath = `${folder}/${finalName}`;
 
     const { error } = await this.supabase.storage

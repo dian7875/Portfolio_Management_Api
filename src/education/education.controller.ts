@@ -94,4 +94,11 @@ export class EducationController {
       userId,
     });
   }
+
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @Get(':id')
+  getById(@Param('id', ParseIntPipe) id: number) {
+    return this.educationService.getOneById(id);
+  }
 }

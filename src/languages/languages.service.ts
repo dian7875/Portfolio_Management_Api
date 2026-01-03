@@ -30,6 +30,7 @@ export class LanguagesService {
 
       return { message: 'Successful' };
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2003') {
           throw new NotFoundException('User not found');
@@ -68,6 +69,7 @@ export class LanguagesService {
         },
       });
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Language reference not found');
@@ -95,6 +97,7 @@ export class LanguagesService {
 
       return { message: 'Successful' };
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Language reference not found');
@@ -135,6 +138,7 @@ export class LanguagesService {
 
       return { message: 'Successful' };
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Language reference not found');
@@ -161,7 +165,7 @@ export class LanguagesService {
       this.prisma.language.findMany({
         where,
         orderBy: {
-          id: 'asc',
+          id: 'desc',
         },
         skip,
         take: limit,

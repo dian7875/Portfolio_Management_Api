@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prismaConfig/prisma.service';
-import { Prisma } from 'generated/prisma/client';
+import { Experience, Prisma } from 'generated/prisma/client';
 import { CreateExperienceDto } from './dto/createExperience.dto';
 import { ExperienceFiltersDto } from './dto/experiencesFilters.dto';
 import { UpdateExperienceDto } from './dto/updateExperience.dto';
@@ -30,6 +30,7 @@ export class ExperiencesService {
 
       return { message: 'Successful' };
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2003') {
           throw new NotFoundException('User not found');
@@ -68,6 +69,7 @@ export class ExperiencesService {
         },
       });
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Experience reference not found');
@@ -95,6 +97,7 @@ export class ExperiencesService {
 
       return { message: 'Successful' };
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Experience reference not found');
@@ -138,6 +141,7 @@ export class ExperiencesService {
 
       return { message: 'Successful' };
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Experience reference not found');
@@ -182,5 +186,20 @@ export class ExperiencesService {
         hasPrev: page > 1,
       },
     };
+  }
+
+  async getOneById(id: number): Promise<Experience> {
+    const experienceData = await this.prisma.experience.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!experienceData) {
+      throw new NotFoundException(
+        'No existe una red social con el id especificado',
+      );
+    }
+    return experienceData;
   }
 }

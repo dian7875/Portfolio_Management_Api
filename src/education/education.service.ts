@@ -8,6 +8,7 @@ import {
 import { PrismaService } from 'src/prismaConfig/prisma.service';
 import { Prisma } from 'generated/prisma/client';
 import { CreateDegreeDto, EducationFiltersDto, UpdateDegreeDto } from './dto';
+import { Education } from 'generated/prisma/browser';
 
 @Injectable()
 export class EducationService {
@@ -28,6 +29,7 @@ export class EducationService {
       });
       return { message: 'Succesfull' };
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         switch (error.code) {
           case 'P2003':
@@ -62,12 +64,12 @@ export class EducationService {
 
       return { message: 'Successful' };
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Education Degree not found');
         }
       }
-
       throw new InternalServerErrorException(
         'Could not update education Degree.',
       );
@@ -103,12 +105,12 @@ export class EducationService {
       });
       return;
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Education Degree not found');
         }
       }
-
       throw new InternalServerErrorException(
         'Could not update education Degree.',
       );
@@ -141,12 +143,12 @@ export class EducationService {
       await this.prisma.education.delete({ where: { id: DegreeId } });
       return { message: 'Successful' };
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Education Degree not found');
         }
       }
-
       throw new InternalServerErrorException(
         'Could not update education Degree.',
       );
@@ -188,5 +190,20 @@ export class EducationService {
         hasPrev: page > 1,
       },
     };
+  }
+
+  async getOneById(id: number): Promise<Education> {
+    const educationData = await this.prisma.education.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!educationData) {
+      throw new NotFoundException(
+        'No existe una habilidad con el id especificado',
+      );
+    }
+    return educationData;
   }
 }

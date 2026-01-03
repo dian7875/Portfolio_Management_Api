@@ -30,7 +30,8 @@ export class AuthService {
           passwordHash,
         },
       });
-    } catch (error) {
+    } catch (error) {  
+console.error(error)
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
           throw new ConflictException(`User already exists`);
@@ -76,7 +77,8 @@ export class AuthService {
           id: userSafe.id,
         }),
       };
-    } catch (error) {
+    } catch (error) {  
+console.error(error)
       if (error instanceof UnauthorizedException) {
         throw error;
       }

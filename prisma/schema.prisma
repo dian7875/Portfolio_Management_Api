@@ -24,7 +24,7 @@ model User {
   location     String?
   hostUrl      String?
   photoUrl     String?
-  photoPath   String?
+  photoPath    String?
   cvUrl        String?
   cvPath       String?
   email        String? @unique
@@ -68,7 +68,7 @@ model Education {
   title       String
   description String?
   startDate   DateTime
-  finished    Boolean
+  finished    Boolean   @default(false)
   endDate     DateTime?
   hidden      Boolean   @default(false)
 

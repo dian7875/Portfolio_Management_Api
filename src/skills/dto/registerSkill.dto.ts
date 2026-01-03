@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class RegisterSkillDto {
@@ -10,12 +11,13 @@ export class RegisterSkillDto {
 
   @ApiPropertyOptional({
     example: 4,
-    description: 'Skill level from 1 to 5',
+    description: 'Skill level from 1 to 10',
   })
+  @Transform(({ value }) => (value ? Number(value) : undefined))
   @IsOptional()
   @IsInt()
   @Min(1)
-  @Max(5)
+  @Max(10)
   level?: number;
 
   @ApiPropertyOptional({

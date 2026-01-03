@@ -37,6 +37,7 @@ export class CreateDegreeDto {
     example: true,
     description: 'Indicates whether the record is finished or in progress',
   })
+  @IsOptional()
   @Transform(({ value }) => {
     if (typeof value === 'boolean') return value;
     if (typeof value === 'string') {
@@ -45,7 +46,7 @@ export class CreateDegreeDto {
     return Boolean(value);
   })
   @IsBoolean()
-  finished: boolean;
+  finished?: boolean;
 
   @ApiPropertyOptional({
     example: '2021-01-15',

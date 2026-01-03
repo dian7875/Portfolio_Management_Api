@@ -14,8 +14,12 @@ export class UpdateProjectDto {
   @ApiProperty({
     example: 'Portfolio API',
   })
+  @ApiPropertyOptional({
+    example: 'Backend project',
+  })
+  @IsOptional()
   @IsString()
-  title: string;
+  title?: string;
 
   @ApiPropertyOptional({
     example: 'Backend project',
@@ -47,10 +51,11 @@ export class UpdateProjectDto {
   @IsUrl()
   demoUrl?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'NestJS,Prisma,Supabase',
     description: 'Comma separated values',
   })
+  @IsOptional()
   @Transform(({ value }) => {
     if (Array.isArray(value)) return value;
     if (typeof value === 'string') {
@@ -59,18 +64,17 @@ export class UpdateProjectDto {
     return [];
   })
   @IsArray()
-  @ArrayNotEmpty()
   @IsString({ each: true })
-  techStack: string[];
+  techStack?: string[];
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: '2024-06-30',
     description: 'Project date (ISO 8601 format)',
   })
   @Transform(({ value }) => (value ? new Date(value) : undefined))
-  @IsNotEmpty()
+  @IsOptional()
   @IsDate()
-  finishDate: Date;
+  finishDate?: Date;
 
   @ApiPropertyOptional({
     example: 'projects/userId/img1.png,projects/userId/img2.png',
@@ -84,5 +88,5 @@ export class UpdateProjectDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  keepImagesPath?: string[];
+  imagesPath?: string[];
 }

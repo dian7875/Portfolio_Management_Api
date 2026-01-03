@@ -8,7 +8,7 @@ import { CreateProjectDto } from './dto/createProject.dto';
 import { PrismaService } from 'src/prismaConfig/prisma.service';
 import { StorageService } from 'src/storage/storage.service';
 import { ProjectFiltersDto } from './dto/projects.filters.dto';
-import { Prisma } from 'generated/prisma/client';
+import { Prisma, Project } from 'generated/prisma/client';
 import { UpdateProjectDto } from './dto/updateProject.dto';
 
 @Injectable()
@@ -29,7 +29,11 @@ export class ProjectsService {
 
     const uploads = await Promise.all(
       files.map((file) =>
-        this.storageService.uploadFile(userId, file, 'projects'),
+        this.storageService.uploadFile(
+          userId,
+          file,
+          `${userId}/projects/${dto.title}`,
+        ),
       ),
     );
 
@@ -47,6 +51,7 @@ export class ProjectsService {
 
       return { message: 'Successful' };
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException('Could not create project');
     }
   }
@@ -110,6 +115,7 @@ export class ProjectsService {
         },
       });
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Project reference not found');
@@ -137,7 +143,7 @@ export class ProjectsService {
     return { message: 'Successful' };
   }
 
-  async removeExperience(
+  async removeProject(
     userId: string,
     id: number,
   ): Promise<{ message: string }> {
@@ -157,6 +163,7 @@ export class ProjectsService {
 
       return { message: 'Successful' };
     } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Project reference not found');
@@ -170,68 +177,86 @@ export class ProjectsService {
   }
 
   async updateProject(
-  userId: string,
-  id: number,
-  dto: UpdateProjectDto,
-  files: Express.Multer.File[],
-): Promise<{ message: string }> {
-  await this.verifyProperty(userId, id);
+    userId: string,
+    id: number,
+    dto: UpdateProjectDto,
+    files: Express.Multer.File[],
+  ): Promise<{ message: string }> {
+    await this.verifyProperty(userId, id);
 
-  const project = await this.prisma.project.findUnique({
-    where: { id },
-  });
+    const project = await this.prisma.project.findUnique({
+      where: { id },
+    });
 
-  if (!project) {
-    throw new NotFoundException('Project not found');
-  }
+    if (!project) {
+      throw new NotFoundException('Project not found');
+    }
 
-  const keepPaths = dto.keepImagesPath ?? [];
+    const keepPaths = dto.imagesPath ?? [];
 
-  const toDelete = project.imagesPath.filter(
-    path => !keepPaths.includes(path),
-  );
-
-  if (toDelete.length) {
-    await Promise.all(
-      toDelete.map(path => this.storageService.deleteFile(path)),
+    const toDelete = project.imagesPath.filter(
+      (path) => !keepPaths.includes(path),
     );
+
+    if (toDelete.length) {
+      await Promise.all(
+        toDelete.map((path) => this.storageService.deleteFile(path)),
+      );
+    }
+
+    const uploads = files?.length
+      ? await Promise.all(
+          files.map((file) =>
+            this.storageService.uploadFile(
+              userId,
+              file,
+              `${userId}/projects/${project.title}`,
+            ),
+          ),
+        )
+      : [];
+
+    const newPaths = uploads.map((u) => u.path);
+    const newUrls = uploads.map((u) => u.publicUrl);
+
+    const finalPaths = [...keepPaths, ...newPaths];
+    const finalUrls = [
+      ...project.imagesUrl.filter((_, i) =>
+        keepPaths.includes(project.imagesPath[i]),
+      ),
+      ...newUrls,
+    ];
+
+    await this.prisma.project.update({
+      where: { id },
+      data: {
+        title: dto.title,
+        subtitle: dto.subtitle,
+        description: dto.description,
+        repoUrl: dto.repoUrl,
+        demoUrl: dto.demoUrl,
+        techStack: dto.techStack,
+        finishDate: dto.finishDate,
+        imagesPath: finalPaths,
+        imagesUrl: finalUrls,
+      },
+    });
+
+    return { message: 'Successful' };
   }
 
-  const uploads = files?.length
-    ? await Promise.all(
-        files.map(file =>
-          this.storageService.uploadFile(userId, file, 'projects'),
-        ),
-      )
-    : [];
+  async getOneById(id: number): Promise<Project> {
+    const Data = await this.prisma.project.findUnique({
+      where: {
+        id,
+      },
+    });
 
-  const newPaths = uploads.map(u => u.path);
-  const newUrls = uploads.map(u => u.publicUrl);
-
-  const finalPaths = [...keepPaths, ...newPaths];
-  const finalUrls = [
-    ...project.imagesUrl.filter((_, i) =>
-      keepPaths.includes(project.imagesPath[i]),
-    ),
-    ...newUrls,
-  ];
-
-  await this.prisma.project.update({
-    where: { id },
-    data: {
-      title: dto.title,
-      subtitle: dto.subtitle,
-      description: dto.description,
-      repoUrl: dto.repoUrl,
-      demoUrl: dto.demoUrl,
-      techStack: dto.techStack,
-      finishDate: dto.finishDate,
-      imagesPath: finalPaths,
-      imagesUrl: finalUrls,
-    },
-  });
-
-  return { message: 'Successful' };
-}
-
+    if (!Data) {
+      throw new NotFoundException(
+        'No existe una red social con el id especificado',
+      );
+    }
+    return Data;
+  }
 }
