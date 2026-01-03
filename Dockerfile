@@ -14,9 +14,6 @@ WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
 
-# Generar Prisma antes de compilar TS
-RUN npx prisma generate
-
 # Compilar TypeScript
 RUN npm run build
 
