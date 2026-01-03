@@ -30,8 +30,8 @@ export class AuthService {
           passwordHash,
         },
       });
-    } catch (error) {  
-console.error(error)
+    } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
           throw new ConflictException(`User already exists`);
@@ -55,6 +55,7 @@ console.error(error)
           id: true,
           email: true,
           phone: true,
+          photoUrl: true,
         },
       });
 
@@ -77,8 +78,8 @@ console.error(error)
           id: userSafe.id,
         }),
       };
-    } catch (error) {  
-console.error(error)
+    } catch (error) {
+      console.error(error);
       if (error instanceof UnauthorizedException) {
         throw error;
       }
