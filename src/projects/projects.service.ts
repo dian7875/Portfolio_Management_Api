@@ -240,7 +240,8 @@ export class ProjectsService {
         finishDate: dto.finishDate,
         imagesPath: finalPaths,
         imagesUrl: finalUrls,
-        highlight: dto.highlight
+        highlight: dto.highlight,
+        role: dto.role
       },
     });
 

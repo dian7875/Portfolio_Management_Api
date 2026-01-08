@@ -26,6 +26,13 @@ export class CreateProjectDto {
   subtitle?: string;
 
   @ApiPropertyOptional({
+    example: 'Full stack dev',
+  })
+  @IsOptional()
+  @IsString()
+  role?: string;
+
+  @ApiPropertyOptional({
     example: 'REST API built with NestJS and Prisma',
   })
   @IsOptional()

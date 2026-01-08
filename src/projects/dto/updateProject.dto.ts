@@ -102,4 +102,11 @@ export class UpdateProjectDto {
   })
   @IsBoolean()
   highlight?: boolean;
+
+  @ApiPropertyOptional({
+    example: 'Full stack dev',
+  })
+  @IsOptional()
+  @IsString()
+  role?: string;
 }
