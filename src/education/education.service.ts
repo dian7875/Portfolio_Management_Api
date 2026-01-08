@@ -206,4 +206,17 @@ export class EducationService {
     }
     return educationData;
   }
+  async getNames(userId: string) {
+    return this.prisma.education.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        id: true,
+        title: true,
+      },
+    });
+  }
+
+
 }

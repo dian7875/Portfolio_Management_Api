@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Query,
+  UnauthorizedException,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -82,6 +83,16 @@ export class ProjectsController {
     @Query() filters: ProjectFiltersDto,
   ) {
     return this.projectsService.getProjects(userId, filters);
+  }
+
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @Get('names')
+  getMyProjectsNames(@CurrentUser('id') userId: string) {
+    if (!userId) {
+      throw new BadRequestException('Id del usuario es requerido');
+    }
+    return this.projectsService.getNames(userId);
   }
 
   @ApiHeader({

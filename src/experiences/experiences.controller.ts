@@ -43,6 +43,16 @@ export class ExperiencesController {
     return this.experiencesService.getExperiences(userId, filters);
   }
 
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @Get('companies')
+  getMyExperiencesNames(@CurrentUser('id') userId: string) {
+    if (!userId) {
+      throw new BadRequestException('Id del usuario es requerido');
+    }
+    return this.experiencesService.getNames(userId);
+  }
+
   @ApiHeader({
     name: 'X-Portfolio-Owner',
     description: 'UUID del propietario del portfolio',

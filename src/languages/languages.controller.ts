@@ -42,6 +42,17 @@ export class LanguagesController {
   ) {
     return this.languagesService.getLanguages(userId, filters);
   }
+
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @Get('names')
+  getMyLanguagesNames(@CurrentUser('id') userId: string) {
+        if (!userId) {
+      throw new BadRequestException('Id del usuario es requerido');
+    }
+    return this.languagesService.getNames(userId);
+  }
+
   @ApiHeader({
     name: 'X-Portfolio-Owner',
     description: 'UUID del propietario del portfolio',

@@ -108,6 +108,16 @@ export class EducationController {
 
   @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
+  @Get('titles')
+  getMyEducationTitles(@CurrentUser('id', new ParseUUIDPipe()) userId: string) {
+    if (!userId) {
+      throw new BadRequestException('Id del usuario es requerido');
+    }
+    return this.educationService.getNames(userId);
+  }
+
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
   @Get(':id')
   getById(@Param('id', ParseIntPipe) id: number) {
     return this.educationService.getOneById(id);

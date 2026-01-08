@@ -27,8 +27,8 @@ export class SkillsService {
       });
 
       return { message: 'Successful' };
-    } catch (error) {  
-console.error(error)
+    } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException('Could not create skill');
     }
   }
@@ -166,5 +166,17 @@ console.error(error)
       );
     }
     return skillData;
+  }
+
+  async getNames(userId: string) {
+    return this.prisma.skill.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
   }
 }

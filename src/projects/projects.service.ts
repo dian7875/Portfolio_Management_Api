@@ -261,4 +261,16 @@ export class ProjectsService {
     }
     return Data;
   }
+
+    async getNames(userId: string) {
+    return this.prisma.project.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        id: true,
+        title: true,
+      },
+    });
+  }
 }

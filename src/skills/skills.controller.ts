@@ -51,6 +51,17 @@ export class SkillsController {
     }
     return this.skillsService.myCurrentSkillsCategory(userId);
   }
+
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @Get('names')
+  getMySkillsNames(@CurrentUser('id') userId: string) {
+    if (!userId) {
+      throw new BadRequestException('Id del usuario es requerido');
+    }
+    return this.skillsService.getNames(userId);
+  }
+
   @ApiHeader({
     name: 'X-Portfolio-Owner',
     description: 'UUID del propietario del portfolio',

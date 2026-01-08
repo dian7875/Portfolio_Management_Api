@@ -202,4 +202,18 @@ export class ExperiencesService {
     }
     return experienceData;
   }
+
+    async getNames(userId: string) {
+    return this.prisma.experience.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        id: true,
+        company: true,
+      },
+    });
+  }
+
+
 }

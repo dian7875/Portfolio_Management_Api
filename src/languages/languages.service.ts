@@ -200,4 +200,18 @@ export class LanguagesService {
 
     return languageData;
   }
+
+
+    async getNames(userId: string) {
+    return this.prisma.language.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        id: true,
+        language: true,
+      },
+    });
+  }
+
 }
