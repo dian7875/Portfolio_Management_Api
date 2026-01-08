@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{user.name}} - CV</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+      line-height: 1.4;
+      margin: 20px;
+    }
+    h1, h2, h3 {
+      margin: 0;
+      padding: 0;
+    }
+    h1 { font-size: 24px; margin-bottom: 5px; }
+    h2 { font-size: 20px; margin-top: 20px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 3px; }
+    h3 { font-size: 16px; margin-top: 10px; margin-bottom: 5px; }
+    p { margin: 2px 0; }
+    ul { margin: 5px 0 10px 20px; }
+    .section { margin-bottom: 20px; }
+    .stack-badge {
+      display: inline-block;
+      background: #eee;
+      padding: 2px 6px;
+      margin: 2px;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+    .project-highlight { background: #fffbcc; padding: 5px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>{{user.name}}</h1>
+  <p><strong>{{user.title}}</strong> - {{user.subTitle}}</p>
+  <p>{{user.location}} | Email: {{user.email}} | Tel: {{user.phone}}</p>
+  <p>Portfolio: <a href="{{user.hostUrl}}">{{user.hostUrl}}</a> | CV: <a href="{{user.cvUrl}}">Descargar PDF</a></p>
+
+  <div class="section">
+    <h2>Perfil</h2>
+    <p>{{user.bio}}</p>
+  </div>
+
+  {{#if skills.length}}
+  <div class="section">
+    <h2>Habilidades</h2>
+    <ul>
+      {{#each skills}}
+        <li>{{name}} (Nivel: {{level}}) - {{category}}</li>
+      {{/each}}
+    </ul>
+  </div>
+  {{/if}}
+
+  {{#if languages.length}}
+  <div class="section">
+    <h2>Idiomas</h2>
+    <ul>
+      {{#each languages}}
+        <li>{{language}} - {{level}}</li>
+      {{/each}}
+    </ul>
+  </div>
+  {{/if}}
+
+  {{#if education.length}}
+  <div class="section">
+    <h2>Educación</h2>
+    {{#each education}}
+      <h3>{{title}} - {{institution}}</h3>
+      <p>{{period}}</p>
+    {{/each}}
+  </div>
+  {{/if}}
+
+  {{#if experience.length}}
+  <div class="section">
+    <h2>Experiencia</h2>
+    {{#each experience}}
+      <h3>{{role}} - {{company}}</h3>
+      <p>{{period}}</p>
+      <p>{{description}}</p>
+      {{#if responsibilities.length}}
+      <ul>
+        {{#each responsibilities}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+      {{/if}}
+    {{/each}}
+  </div>
+  {{/if}}
+
+  {{#if projects.length}}
+  <div class="section">
+    <h2>Proyectos</h2>
+    {{#each projects}}
+      <div class="{{#if highlight}}project-highlight{{/if}}">
+        <h3>{{name}} {{#if subtitle}}- {{subtitle}}{{/if}}</h3>
+        <p>{{description}}</p>
+        <p><strong>Rol:</strong> {{role}}</p>
+        <p><strong>Stack:</strong>
+          {{#each stack}}
+            <span class="stack-badge">{{this}}</span>
+          {{/each}}
+        </p>
+        {{#if demo}}<p>Demo: <a href="{{demo}}">{{demo}}</a></p>{{/if}}
+        {{#if repo}}<p>Repo: <a href="{{repo}}">{{repo}}</a></p>{{/if}}
+      </div>
+    {{/each}}
+  </div>
+  {{/if}}
+</body>
+</html>

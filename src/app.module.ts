@@ -8,6 +8,7 @@ import { ExperiencesModule } from './experiences/experiences.module';
 import { SkillsModule } from './skills/skills.module';
 import { ProjectsModule } from './projects/projects.module';
 import { UsersModule } from './users/users.module';
+import { CvgeneratorModule } from './cvgenerator/cvgenerator.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { UsersModule } from './users/users.module';
     ExperiencesModule,
     SkillsModule,
     ProjectsModule,
-    UsersModule
+    UsersModule,
+    CvgeneratorModule
   ],
   controllers: [],
   providers: [],

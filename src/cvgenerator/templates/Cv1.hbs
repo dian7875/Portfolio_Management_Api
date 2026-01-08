@@ -1,0 +1,209 @@
+<html lang='es'>
+  <head>
+    <meta charset='UTF-8' />
+    <title>{{name}} - CV</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        color: #333;
+        line-height: 1.4;
+        margin: 20px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        font-size: 18px;
+        color: #1e40af; 
+        margin-bottom: 5px;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        font-size: 12px;
+        font-weight: bold;
+        color: #1f2937; 
+        margin-bottom: 10px;
+      }
+
+      h3 {
+        font-size: 14px;
+        font-weight: bold;
+        color: #1e40af; 
+        margin-top: 20px;
+        margin-bottom: 5px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 3px;
+      }
+
+      p,
+      td,
+      li {
+        font-size: 12px;
+        color: #333;
+      }
+
+      ul {
+        margin: 5px 0 10px 20px;
+        padding: 0;
+      }
+
+      .stack-badge {
+        display: inline-block;
+        background: #eee;
+        padding: 2px 6px;
+        margin: 2px;
+        border-radius: 3px;
+        font-size: 12px;
+      }
+
+      .project-highlight {
+        background: #fffbcc;
+        padding: 5px;
+        border-radius: 5px;
+      }
+
+      a {
+        color: #1e40af;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <table width='100%' style='margin-bottom: 20px;'>
+      <tr>
+        <td>
+          <h1>{{name}}</h1>
+          <h2>{{title}} {{subTitle}}</h2>
+        </td>
+      </tr>
+      <tr>
+        <td style='padding-top: 5px;'>
+          <div>{{location}}</div>
+          <div>Email: {{email}} | Tel: {{phone}}</div>
+          <div>Portfolio:
+            <a href='{{hostUrl}}' target='_blank'>{{hostUrl}}</a></div>
+        </td>
+      </tr>
+    </table>
+
+    {{#if bio}}
+      <div class='section'>
+        <h3>Perfil</h3>
+        <p>{{bio}}</p>
+      </div>
+    {{/if}}
+
+    {{#if experience.length}}
+      <div class='section'>
+        <h3>Experiencia laboral</h3>
+        <table width='100%' style='margin-bottom: 15px;'>
+          {{#each experience}}
+            <tr>
+              <td style='font-weight:bold;'>{{role}} - {{company}}</td>
+              <td style='text-align:right;'>{{period}}</td>
+            </tr>
+            <tr>
+              <td colspan='2' style='padding-bottom:4px;'>{{description}}</td>
+            </tr>
+            {{#if responsibilities.length}}
+              <tr>
+                <td colspan='2' style='padding-left:15px;'>
+                  <ul>
+                    {{#each responsibilities}}<li>{{this}}</li>{{/each}}
+                  </ul>
+                </td>
+              </tr>
+            {{/if}}
+          {{/each}}
+        </table>
+      </div>
+    {{/if}}
+
+    {{#if education.length}}
+      <div class='section'>
+        <h3>Educación</h3>
+        <table width='100%' style='margin-bottom: 15px;'>
+          {{#each education}}
+            <tr>
+              <td style='font-weight:bold;'>{{title}}</td>
+              <td style='text-align:right;'>{{period}}</td>
+            </tr>
+            <tr>
+              <td colspan='2' style='padding-bottom:8px;'>{{institution}}</td>
+            </tr>
+          {{/each}}
+        </table>
+      </div>
+    {{/if}}
+
+    {{#if skills.length}}
+      <div class='section'>
+        <h3>Habilidades</h3>
+        {{#each skills}}
+          <p>
+            <strong>{{category}}:</strong>
+            {{#each items}}
+              {{name}}{{#unless @last}}, {{/unless}}
+            {{/each}}
+          </p>
+        {{/each}}
+      </div>
+
+    {{/if}}
+
+    {{#if languages.length}}
+      <div class='section'>
+        <h3>Idiomas</h3>
+        <p>
+          {{#each languages}}
+            {{language}}
+            -
+            {{level}}{{#unless @last}}, {{/unless}}
+          {{/each}}
+        </p>
+      </div>
+    {{/if}}
+
+    {{#if projects.length}}
+      <div class='section'>
+        <h3>Proyectos</h3>
+        {{#each projects}}
+          <table width='100%' style='margin-bottom:10px; font-size:12px;'>
+            <tr>
+              <td style='font-weight:bold;'>{{name}}</td>
+              <td style='text-align:right;'></td>
+            </tr>
+            {{#if subtitle}}
+              <tr>
+                <td
+                  colspan='2'
+                  style='font-style:italic; padding-bottom:4px;'
+                >{{subtitle}}</td>
+              </tr>
+            {{/if}}
+            <tr>
+              <td colspan='2' style='padding-bottom:4px;'>{{description}}</td>
+            </tr>
+            <tr>
+              <td colspan='2' style='padding-bottom:4px;'>
+                Tecnologías:
+                {{#each stack}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+              </td>
+            </tr>
+            {{#if role}}
+              <tr>
+                <td colspan='2' style='padding-bottom:4px;'>Rol: {{role}}</td>
+              </tr>
+            {{/if}}
+          </table>
+        {{/each}}
+      </div>
+    {{/if}}
+  </body>
+</html>

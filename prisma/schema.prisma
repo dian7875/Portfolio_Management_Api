@@ -89,6 +89,7 @@ model Project {
   id          Int      @id @default(autoincrement())
   userId      String
   title       String
+  role        String?
   subtitle    String?
   description String?
   imagesUrl   String[]
