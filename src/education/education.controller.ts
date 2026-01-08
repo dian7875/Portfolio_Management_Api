@@ -14,9 +14,11 @@ import {
 } from '@nestjs/common';
 import { EducationService } from './education.service';
 import { CurrentUser } from 'src/auth/currentUser.decorator';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreateDegreeDto, EducationFiltersDto, UpdateDegreeDto } from './dto';
+import { PortfolioOwner } from 'src/auth/portfolio-owner.decorator';
+import { PortfolioOwnerGuard } from 'src/auth/protfolio-owner.guard';
 
 @Controller('education')
 export class EducationController {
@@ -72,11 +74,20 @@ export class EducationController {
     return this.educationService.removeDegree(userId, DegreeId);
   }
 
+  @ApiHeader({
+    name: 'X-Portfolio-Owner',
+    description: 'UUID del propietario del portfolio',
+    required: true,
+    example: '6f1c3a2e-8b1f-4f6a-9a4e-2e3b9c7a91d4',
+  })
+  @UseGuards(PortfolioOwnerGuard)
   @Get('by-user')
-  getEducationByUserId(@Query() filters: EducationFiltersDto) {
-    if (!filters.userId) {
-      throw new BadRequestException('userId is required');
-    }
+  getEducationByUserId(
+    @Query() filters: EducationFiltersDto,
+    @PortfolioOwner() ownerId: string,
+  ) {
+    filters.userId = ownerId;
+
     return this.educationService.getEducationDegreesByUser({
       ...filters,
     });

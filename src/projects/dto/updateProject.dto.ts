@@ -6,6 +6,7 @@ import {
   IsUrl,
   ArrayNotEmpty,
   IsNotEmpty,
+  IsBoolean,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -89,4 +90,16 @@ export class UpdateProjectDto {
   @IsArray()
   @IsString({ each: true })
   imagesPath?: string[];
+
+  @ApiPropertyOptional({})
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') {
+      return value === 'true' || value === '1';
+    }
+    return Boolean(value);
+  })
+  @IsBoolean()
+  highlight?: boolean;
 }

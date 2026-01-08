@@ -12,12 +12,14 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { SkillsService } from './skills.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CurrentUser } from 'src/auth/currentUser.decorator';
 import { SkillFiltersDto } from './dto/skill.filters.dto';
 import { UpdateSkillDto } from './dto/updateSkill.dto';
 import { RegisterSkillDto } from './dto/registerSkill.dto';
+import { PortfolioOwner } from 'src/auth/portfolio-owner.decorator';
+import { PortfolioOwnerGuard } from 'src/auth/protfolio-owner.guard';
 @ApiTags('Skills')
 @Controller('skills')
 export class SkillsController {
@@ -49,10 +51,19 @@ export class SkillsController {
     }
     return this.skillsService.myCurrentSkillsCategory(userId);
   }
-
+  @ApiHeader({
+    name: 'X-Portfolio-Owner',
+    description: 'UUID del propietario del portfolio',
+    required: true,
+    example: '6f1c3a2e-8b1f-4f6a-9a4e-2e3b9c7a91d4',
+  })
+  @UseGuards(PortfolioOwnerGuard)
   @Get()
-  findByUser(@Query() filters: SkillFiltersDto) {
-    return this.skillsService.findAll(filters.userId!, filters);
+  findByUser(
+    @Query() filters: SkillFiltersDto,
+    @PortfolioOwner() ownerId: string,
+  ) {
+    return this.skillsService.findAll(ownerId, filters);
   }
 
   @ApiBearerAuth('access-token')

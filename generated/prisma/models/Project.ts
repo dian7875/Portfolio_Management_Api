@@ -43,6 +43,7 @@ export type ProjectMinAggregateOutputType = {
   repoUrl: string | null
   demoUrl: string | null
   hidden: boolean | null
+  highlight: boolean | null
   finishDate: Date | null
 }
 
@@ -55,6 +56,7 @@ export type ProjectMaxAggregateOutputType = {
   repoUrl: string | null
   demoUrl: string | null
   hidden: boolean | null
+  highlight: boolean | null
   finishDate: Date | null
 }
 
@@ -70,6 +72,7 @@ export type ProjectCountAggregateOutputType = {
   demoUrl: number
   techStack: number
   hidden: number
+  highlight: number
   finishDate: number
   _all: number
 }
@@ -92,6 +95,7 @@ export type ProjectMinAggregateInputType = {
   repoUrl?: true
   demoUrl?: true
   hidden?: true
+  highlight?: true
   finishDate?: true
 }
 
@@ -104,6 +108,7 @@ export type ProjectMaxAggregateInputType = {
   repoUrl?: true
   demoUrl?: true
   hidden?: true
+  highlight?: true
   finishDate?: true
 }
 
@@ -119,6 +124,7 @@ export type ProjectCountAggregateInputType = {
   demoUrl?: true
   techStack?: true
   hidden?: true
+  highlight?: true
   finishDate?: true
   _all?: true
 }
@@ -221,6 +227,7 @@ export type ProjectGroupByOutputType = {
   demoUrl: string | null
   techStack: string[]
   hidden: boolean
+  highlight: boolean
   finishDate: Date
   _count: ProjectCountAggregateOutputType | null
   _avg: ProjectAvgAggregateOutputType | null
@@ -259,6 +266,7 @@ export type ProjectWhereInput = {
   demoUrl?: Prisma.StringNullableFilter<"Project"> | string | null
   techStack?: Prisma.StringNullableListFilter<"Project">
   hidden?: Prisma.BoolFilter<"Project"> | boolean
+  highlight?: Prisma.BoolFilter<"Project"> | boolean
   finishDate?: Prisma.DateTimeFilter<"Project"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -275,6 +283,7 @@ export type ProjectOrderByWithRelationInput = {
   demoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   techStack?: Prisma.SortOrder
   hidden?: Prisma.SortOrder
+  highlight?: Prisma.SortOrder
   finishDate?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -294,6 +303,7 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   demoUrl?: Prisma.StringNullableFilter<"Project"> | string | null
   techStack?: Prisma.StringNullableListFilter<"Project">
   hidden?: Prisma.BoolFilter<"Project"> | boolean
+  highlight?: Prisma.BoolFilter<"Project"> | boolean
   finishDate?: Prisma.DateTimeFilter<"Project"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
@@ -310,6 +320,7 @@ export type ProjectOrderByWithAggregationInput = {
   demoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   techStack?: Prisma.SortOrder
   hidden?: Prisma.SortOrder
+  highlight?: Prisma.SortOrder
   finishDate?: Prisma.SortOrder
   _count?: Prisma.ProjectCountOrderByAggregateInput
   _avg?: Prisma.ProjectAvgOrderByAggregateInput
@@ -333,6 +344,7 @@ export type ProjectScalarWhereWithAggregatesInput = {
   demoUrl?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
   techStack?: Prisma.StringNullableListFilter<"Project">
   hidden?: Prisma.BoolWithAggregatesFilter<"Project"> | boolean
+  highlight?: Prisma.BoolWithAggregatesFilter<"Project"> | boolean
   finishDate?: Prisma.DateTimeWithAggregatesFilter<"Project"> | Date | string
 }
 
@@ -346,6 +358,7 @@ export type ProjectCreateInput = {
   demoUrl?: string | null
   techStack?: Prisma.ProjectCreatetechStackInput | string[]
   hidden?: boolean
+  highlight?: boolean
   finishDate: Date | string
   user: Prisma.UserCreateNestedOneWithoutProjectsInput
 }
@@ -362,6 +375,7 @@ export type ProjectUncheckedCreateInput = {
   demoUrl?: string | null
   techStack?: Prisma.ProjectCreatetechStackInput | string[]
   hidden?: boolean
+  highlight?: boolean
   finishDate: Date | string
 }
 
@@ -375,6 +389,7 @@ export type ProjectUpdateInput = {
   demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   techStack?: Prisma.ProjectUpdatetechStackInput | string[]
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  highlight?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
 }
@@ -391,6 +406,7 @@ export type ProjectUncheckedUpdateInput = {
   demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   techStack?: Prisma.ProjectUpdatetechStackInput | string[]
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  highlight?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -406,6 +422,7 @@ export type ProjectCreateManyInput = {
   demoUrl?: string | null
   techStack?: Prisma.ProjectCreatetechStackInput | string[]
   hidden?: boolean
+  highlight?: boolean
   finishDate: Date | string
 }
 
@@ -419,6 +436,7 @@ export type ProjectUpdateManyMutationInput = {
   demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   techStack?: Prisma.ProjectUpdatetechStackInput | string[]
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  highlight?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -434,6 +452,7 @@ export type ProjectUncheckedUpdateManyInput = {
   demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   techStack?: Prisma.ProjectUpdatetechStackInput | string[]
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  highlight?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -459,6 +478,7 @@ export type ProjectCountOrderByAggregateInput = {
   demoUrl?: Prisma.SortOrder
   techStack?: Prisma.SortOrder
   hidden?: Prisma.SortOrder
+  highlight?: Prisma.SortOrder
   finishDate?: Prisma.SortOrder
 }
 
@@ -475,6 +495,7 @@ export type ProjectMaxOrderByAggregateInput = {
   repoUrl?: Prisma.SortOrder
   demoUrl?: Prisma.SortOrder
   hidden?: Prisma.SortOrder
+  highlight?: Prisma.SortOrder
   finishDate?: Prisma.SortOrder
 }
 
@@ -487,6 +508,7 @@ export type ProjectMinOrderByAggregateInput = {
   repoUrl?: Prisma.SortOrder
   demoUrl?: Prisma.SortOrder
   hidden?: Prisma.SortOrder
+  highlight?: Prisma.SortOrder
   finishDate?: Prisma.SortOrder
 }
 
@@ -573,6 +595,7 @@ export type ProjectCreateWithoutUserInput = {
   demoUrl?: string | null
   techStack?: Prisma.ProjectCreatetechStackInput | string[]
   hidden?: boolean
+  highlight?: boolean
   finishDate: Date | string
 }
 
@@ -587,6 +610,7 @@ export type ProjectUncheckedCreateWithoutUserInput = {
   demoUrl?: string | null
   techStack?: Prisma.ProjectCreatetechStackInput | string[]
   hidden?: boolean
+  highlight?: boolean
   finishDate: Date | string
 }
 
@@ -631,6 +655,7 @@ export type ProjectScalarWhereInput = {
   demoUrl?: Prisma.StringNullableFilter<"Project"> | string | null
   techStack?: Prisma.StringNullableListFilter<"Project">
   hidden?: Prisma.BoolFilter<"Project"> | boolean
+  highlight?: Prisma.BoolFilter<"Project"> | boolean
   finishDate?: Prisma.DateTimeFilter<"Project"> | Date | string
 }
 
@@ -645,6 +670,7 @@ export type ProjectCreateManyUserInput = {
   demoUrl?: string | null
   techStack?: Prisma.ProjectCreatetechStackInput | string[]
   hidden?: boolean
+  highlight?: boolean
   finishDate: Date | string
 }
 
@@ -658,6 +684,7 @@ export type ProjectUpdateWithoutUserInput = {
   demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   techStack?: Prisma.ProjectUpdatetechStackInput | string[]
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  highlight?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -672,6 +699,7 @@ export type ProjectUncheckedUpdateWithoutUserInput = {
   demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   techStack?: Prisma.ProjectUpdatetechStackInput | string[]
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  highlight?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -686,6 +714,7 @@ export type ProjectUncheckedUpdateManyWithoutUserInput = {
   demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   techStack?: Prisma.ProjectUpdatetechStackInput | string[]
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  highlight?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -703,6 +732,7 @@ export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   demoUrl?: boolean
   techStack?: boolean
   hidden?: boolean
+  highlight?: boolean
   finishDate?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["project"]>
@@ -719,6 +749,7 @@ export type ProjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   demoUrl?: boolean
   techStack?: boolean
   hidden?: boolean
+  highlight?: boolean
   finishDate?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["project"]>
@@ -735,6 +766,7 @@ export type ProjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   demoUrl?: boolean
   techStack?: boolean
   hidden?: boolean
+  highlight?: boolean
   finishDate?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["project"]>
@@ -751,10 +783,11 @@ export type ProjectSelectScalar = {
   demoUrl?: boolean
   techStack?: boolean
   hidden?: boolean
+  highlight?: boolean
   finishDate?: boolean
 }
 
-export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "subtitle" | "description" | "imagesUrl" | "imagesPath" | "repoUrl" | "demoUrl" | "techStack" | "hidden" | "finishDate", ExtArgs["result"]["project"]>
+export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "subtitle" | "description" | "imagesUrl" | "imagesPath" | "repoUrl" | "demoUrl" | "techStack" | "hidden" | "highlight" | "finishDate", ExtArgs["result"]["project"]>
 export type ProjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -782,6 +815,7 @@ export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     demoUrl: string | null
     techStack: string[]
     hidden: boolean
+    highlight: boolean
     finishDate: Date
   }, ExtArgs["result"]["project"]>
   composites: {}
@@ -1218,6 +1252,7 @@ export interface ProjectFieldRefs {
   readonly demoUrl: Prisma.FieldRef<"Project", 'String'>
   readonly techStack: Prisma.FieldRef<"Project", 'String[]'>
   readonly hidden: Prisma.FieldRef<"Project", 'Boolean'>
+  readonly highlight: Prisma.FieldRef<"Project", 'Boolean'>
   readonly finishDate: Prisma.FieldRef<"Project", 'DateTime'>
 }
     

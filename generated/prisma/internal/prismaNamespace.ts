@@ -1052,6 +1052,7 @@ export const ProjectScalarFieldEnum = {
   demoUrl: 'demoUrl',
   techStack: 'techStack',
   hidden: 'hidden',
+  highlight: 'highlight',
   finishDate: 'finishDate'
 } as const
 

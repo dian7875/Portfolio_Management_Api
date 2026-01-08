@@ -11,13 +11,15 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { LanguagesService } from './languages.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CurrentUser } from 'src/auth/currentUser.decorator';
 import { LanguageFiltersDto } from './dto/languageFilters.dto';
 import { CreateLanguageDto } from './dto/registerLanguaje.dto';
 import { UpdateLanguageDto } from './dto/updateLanguale.dto';
+import { PortfolioOwner } from 'src/auth/portfolio-owner.decorator';
+import { PortfolioOwnerGuard } from 'src/auth/protfolio-owner.guard';
 
 @ApiTags('Languages')
 @Controller('languages')
@@ -40,12 +42,19 @@ export class LanguagesController {
   ) {
     return this.languagesService.getLanguages(userId, filters);
   }
-
+  @ApiHeader({
+    name: 'X-Portfolio-Owner',
+    description: 'UUID del propietario del portfolio',
+    required: true,
+    example: '6f1c3a2e-8b1f-4f6a-9a4e-2e3b9c7a91d4',
+  })
+  @UseGuards(PortfolioOwnerGuard)
   @Get()
-  findAll(@Query() filters: LanguageFiltersDto) {
-    if (!filters.userId) {
-      throw new BadRequestException('userId is required');
-    }
+  findAll(
+    @Query() filters: LanguageFiltersDto,
+    @PortfolioOwner() ownerId: string,
+  ) {
+    filters.userId = ownerId;
     return this.languagesService.getLanguages(filters.userId, filters);
   }
 

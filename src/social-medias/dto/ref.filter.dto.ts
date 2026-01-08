@@ -27,3 +27,18 @@ export class SocialMediaFiltersDto extends PaginationDto {
   @IsBoolean()
   hidden?: boolean;
 }
+
+export class GetOneSocialMediaFilter {
+  @ApiPropertyOptional({})
+  @IsOptional()
+  @IsString()
+  name?: string;
+  
+  @ApiPropertyOptional({
+    description: 'User ID (UUID). Injected from access token',
+    example: '550e8400-e29b-41d4-a716-446655440000',
+  })
+  @IsOptional()
+  @IsString()
+  userId?: string;
+}

@@ -11,9 +11,16 @@ import {
 import { UsersService } from './users.service';
 import { CurrentUser } from 'src/auth/currentUser.decorator';
 import { UpdateBasicInfoDto } from './dto/updateBasicInfo.dto';
-import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiHeader,
+} from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { PortfolioOwner } from 'src/auth/portfolio-owner.decorator';
+import { PortfolioOwnerGuard } from 'src/auth/protfolio-owner.guard';
 
 @Controller('users')
 export class UsersController {
@@ -89,9 +96,19 @@ export class UsersController {
     return this.usersService.getSummary(userId);
   }
 
+  @ApiHeader({
+    name: 'X-Portfolio-Owner',
+    description: 'UUID del propietario del portfolio',
+    required: true,
+    example: '6f1c3a2e-8b1f-4f6a-9a4e-2e3b9c7a91d4',
+  })
+  @UseGuards(PortfolioOwnerGuard)
+  @Get()
+  getUserInfo(@PortfolioOwner() ownerId: string) {
+    return this.usersService.getPublicInfo(ownerId);
+  }
   @Get(':id')
   getBasicInfo(@Param('id') userId: string) {
     return this.usersService.getPublicInfo(userId);
   }
-
 }

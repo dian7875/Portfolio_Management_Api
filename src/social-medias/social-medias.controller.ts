@@ -14,10 +14,15 @@ import {
 import { SocialMediasService } from './social-medias.service';
 import { CurrentUser } from 'src/auth/currentUser.decorator';
 import { CreateSocialMediaDto } from './dto/createRef.dto';
-import { SocialMediaFiltersDto } from './dto/ref.filter.dto';
+import {
+  GetOneSocialMediaFilter,
+  SocialMediaFiltersDto,
+} from './dto/ref.filter.dto';
 import { UpdateSocialMediaDto } from './dto/updateRef.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { PortfolioOwner } from 'src/auth/portfolio-owner.decorator';
+import { PortfolioOwnerGuard } from 'src/auth/protfolio-owner.guard';
 
 @Controller('social-medias')
 export class SocialMediasController {
@@ -39,16 +44,35 @@ export class SocialMediasController {
   ) {
     return this.socialMediasService.getSocialMediaRefs(userId, filters);
   }
+  @ApiHeader({
+    name: 'X-Portfolio-Owner',
+    description: 'UUID del propietario del portfolio',
+    required: true,
+    example: '6f1c3a2e-8b1f-4f6a-9a4e-2e3b9c7a91d4',
+  })
+  @UseGuards(PortfolioOwnerGuard)
+  @Get('/by-name')
+  findByUserAndName(
+    @Query() filters: GetOneSocialMediaFilter,
+    @PortfolioOwner() ownerId: string,
+  ) {
+    filters.userId = ownerId;
+    return this.socialMediasService.getOneByUserIdAndName(filters);
+  }
 
+  @ApiHeader({
+    name: 'X-Portfolio-Owner',
+    description: 'UUID del propietario del portfolio',
+    required: true,
+    example: '6f1c3a2e-8b1f-4f6a-9a4e-2e3b9c7a91d4',
+  })
+  @UseGuards(PortfolioOwnerGuard)
   @Get()
-  findAll(@Query() filters: SocialMediaFiltersDto) {
-    if (!filters.userId) {
-      throw new BadRequestException('userId is required');
-    }
-    return this.socialMediasService.getSocialMediaRefs(
-      filters.userId!!,
-      filters,
-    );
+  findAll(
+    @Query() filters: SocialMediaFiltersDto,
+    @PortfolioOwner() ownerId: string,
+  ) {
+    return this.socialMediasService.getSocialMediaRefs(ownerId, filters);
   }
 
   @ApiBearerAuth('access-token')

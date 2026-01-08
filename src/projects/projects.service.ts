@@ -57,13 +57,14 @@ export class ProjectsService {
   }
 
   async getProjects(userId: string, filters: ProjectFiltersDto) {
-    const { hidden, page = 1, limit = 10 } = filters;
+    const { hidden, page = 1, limit = 10, highlight } = filters;
 
     const skip = (page - 1) * limit;
 
     const where: Prisma.ProjectWhereInput = {
       userId,
       ...(hidden !== undefined && { hidden }),
+      ...(highlight !== undefined && { highlight }),
     };
 
     const [data, total] = await Promise.all([
@@ -239,6 +240,7 @@ export class ProjectsService {
         finishDate: dto.finishDate,
         imagesPath: finalPaths,
         imagesUrl: finalUrls,
+        highlight: dto.highlight
       },
     });
 

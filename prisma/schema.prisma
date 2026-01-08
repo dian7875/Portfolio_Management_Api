@@ -97,6 +97,7 @@ model Project {
   demoUrl     String?
   techStack   String[]
   hidden      Boolean  @default(false)
+  highlight   Boolean  @default(false)
   finishDate  DateTime
   user        User     @relation(fields: [userId], references: [id])
 }

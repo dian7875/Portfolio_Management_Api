@@ -9,7 +9,10 @@ import { PrismaService } from 'src/prismaConfig/prisma.service';
 import { CreateSocialMediaDto } from './dto/createRef.dto';
 import { UpdateSocialMediaDto } from './dto/updateRef.dto';
 import { Prisma, SocialMedia } from 'generated/prisma/client';
-import { SocialMediaFiltersDto } from './dto/ref.filter.dto';
+import {
+  GetOneSocialMediaFilter,
+  SocialMediaFiltersDto,
+} from './dto/ref.filter.dto';
 
 @Injectable()
 export class SocialMediasService {
@@ -30,8 +33,8 @@ export class SocialMediasService {
       });
 
       return { message: 'Successful' };
-    } catch (error) {  
-console.error(error)
+    } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code == 'P2003') {
           throw new NotFoundException('User not found');
@@ -51,8 +54,8 @@ console.error(error)
           hidden: value,
         },
       });
-    } catch (error) {  
-console.error(error)
+    } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Social media reference not found');
@@ -96,8 +99,8 @@ console.error(error)
       });
 
       return { message: 'Successful' };
-    } catch (error) {  
-console.error(error)
+    } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Social media reference not found');
@@ -131,8 +134,8 @@ console.error(error)
       });
 
       return { message: 'Successful' };
-    } catch (error) {  
-console.error(error)
+    } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('Social media reference not found');
@@ -183,6 +186,28 @@ console.error(error)
     const sMediaRefData = await this.prisma.socialMedia.findUnique({
       where: {
         id,
+      },
+    });
+
+    if (!sMediaRefData) {
+      throw new NotFoundException(
+        'No existe una red social con el id especificado',
+      );
+    }
+    return sMediaRefData;
+  }
+
+  async getOneByUserIdAndName(
+    filter: GetOneSocialMediaFilter,
+  ): Promise<Partial<SocialMedia>> {
+    const sMediaRefData = await this.prisma.socialMedia.findFirst({
+      where: {
+        name: { contains: filter.name, mode: 'insensitive' },
+        userId: filter.userId,
+        hidden: false,
+      },
+      select: {
+        redirectLink: true,
       },
     });
 

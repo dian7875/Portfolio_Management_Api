@@ -15,12 +15,19 @@ import {
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiHeader,
+} from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CurrentUser } from 'src/auth/currentUser.decorator';
 import { CreateProjectDto } from './dto/createProject.dto';
 import { ProjectFiltersDto } from './dto/projects.filters.dto';
 import { UpdateProjectDto } from './dto/updateProject.dto';
+import { PortfolioOwner } from 'src/auth/portfolio-owner.decorator';
+import { PortfolioOwnerGuard } from 'src/auth/protfolio-owner.guard';
 
 @Controller('projects')
 export class ProjectsController {
@@ -77,12 +84,19 @@ export class ProjectsController {
     return this.projectsService.getProjects(userId, filters);
   }
 
+  @ApiHeader({
+    name: 'X-Portfolio-Owner',
+    description: 'UUID del propietario del portfolio',
+    required: true,
+    example: '6f1c3a2e-8b1f-4f6a-9a4e-2e3b9c7a91d4',
+  })
+  @UseGuards(PortfolioOwnerGuard)
   @Get()
-  getProjects(@Query() filters: ProjectFiltersDto) {
-    if (!filters.userId) {
-      throw new BadRequestException('userId is required');
-    }
-
+  getProjects(
+    @Query() filters: ProjectFiltersDto,
+    @PortfolioOwner() ownerId: string,
+  ) {
+    filters.userId = ownerId;
     return this.projectsService.getProjects(filters.userId, filters);
   }
 
@@ -156,7 +170,7 @@ export class ProjectsController {
     return this.projectsService.updateProject(userId, id, dto, files);
   }
 
-    @ApiBearerAuth('access-token')
+  @ApiBearerAuth('access-token')
   @UseGuards(AuthGuard)
   @Get(':id')
   getById(@Param('id', ParseIntPipe) id: number) {

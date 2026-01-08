@@ -12,12 +12,14 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { ExperiencesService } from './experiences.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CurrentUser } from 'src/auth/currentUser.decorator';
 import { CreateExperienceDto } from './dto/createExperience.dto';
 import { ExperienceFiltersDto } from './dto/experiencesFilters.dto';
 import { UpdateExperienceDto } from './dto/updateExperience.dto';
+import { PortfolioOwner } from 'src/auth/portfolio-owner.decorator';
+import { PortfolioOwnerGuard } from 'src/auth/protfolio-owner.guard';
 
 @ApiTags('Experiences')
 @Controller('experiences')
@@ -41,11 +43,19 @@ export class ExperiencesController {
     return this.experiencesService.getExperiences(userId, filters);
   }
 
+  @ApiHeader({
+    name: 'X-Portfolio-Owner',
+    description: 'UUID del propietario del portfolio',
+    required: true,
+    example: '6f1c3a2e-8b1f-4f6a-9a4e-2e3b9c7a91d4',
+  })
+  @UseGuards(PortfolioOwnerGuard)
   @Get()
-  findAll(@Query() filters: ExperienceFiltersDto) {
-    if (!filters.userId) {
-      throw new BadRequestException('userId is required');
-    }
+  findAll(
+    @Query() filters: ExperienceFiltersDto,
+    @PortfolioOwner() ownerId: string,
+  ) {
+    filters.userId = ownerId;
     return this.experiencesService.getExperiences(filters.userId, filters);
   }
 

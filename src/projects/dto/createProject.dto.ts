@@ -8,6 +8,7 @@ import {
   ArrayNotEmpty,
   IsDate,
   IsNotEmpty,
+  IsBoolean,
 } from 'class-validator';
 
 export class CreateProjectDto {
@@ -73,4 +74,16 @@ export class CreateProjectDto {
   @IsNotEmpty()
   @IsDate()
   finishDate: Date;
+
+  @ApiPropertyOptional({})
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') {
+      return value === 'true' || value === '1';
+    }
+    return Boolean(value);
+  })
+  @IsBoolean()
+  highlight?: boolean;
 }
