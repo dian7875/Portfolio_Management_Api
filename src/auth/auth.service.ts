@@ -79,7 +79,6 @@ export class AuthService {
         }),
       };
     } catch (error) {
-      console.error(error);
       if (error instanceof UnauthorizedException) {
         throw error;
       }
