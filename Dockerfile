@@ -1,26 +1,20 @@
 # =========================
-# Dependencias
-# =========================
-FROM node:22-bookworm-slim AS deps
-WORKDIR /usr/src/app
-
-COPY package.json package-lock.json ./
-RUN npm install
-
-# CLAVE: instalar chromium + deps
-RUN npx playwright install --with-deps chromium
-
-# =========================
 # Builder
 # =========================
 FROM node:22-bookworm-slim AS build
 WORKDIR /usr/src/app
 
-COPY --from=deps /usr/src/app/node_modules ./node_modules
-COPY . .
+COPY package.json package-lock.json ./
+RUN npm ci
 
+COPY . .
 RUN npm run build
+
+# Limpiar dev deps
 RUN npm ci --only=production && npm cache clean --force
+
+ENV PLAYWRIGHT_BROWSERS_PATH=0
+RUN npx playwright install --with-deps chromium
 
 # =========================
 # Imagen final
