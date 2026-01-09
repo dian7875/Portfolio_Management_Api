@@ -2,9 +2,9 @@ name: CI BUILD & TEST & PUSH
 
 on:
   push:
-    branches: ["master"]
+    branches: ["Produccion"]
   pull_request:
-    branches: ["master"]
+    branches: ["Produccion"]
 
 jobs:
   build-and-test:
