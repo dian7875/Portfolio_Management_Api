@@ -28,8 +28,8 @@ export class UsersService {
       });
 
       return { message: 'Successful' };
-    } catch (error) {  
-console.error(error)
+    } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('User not found');
@@ -90,8 +90,8 @@ console.error(error)
       return {
         message: 'Successful',
       };
-    } catch (error) {  
-console.error(error)
+    } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('User not found');
@@ -126,9 +126,8 @@ console.error(error)
       const upload = await this.storageService.uploadFile(
         userId,
         file,
-        `${userId}/avatar/`,
+        `${userId}/avatar`,
       );
-
       await this.prisma.user.update({
         where: { id: userId },
         data: {
@@ -140,8 +139,8 @@ console.error(error)
       return {
         message: 'Successful',
       };
-    } catch (error) {  
-console.error(error)
+    } catch (error) {
+      console.error(error);
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundException('User not found');
