@@ -18,6 +18,17 @@ export class ProjectsService {
     private readonly storageService: StorageService,
   ) {}
 
+  private normalizeRoute(text: string): string {
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+  }
+
   async addProject(
     userId: string,
     dto: CreateProjectDto,
@@ -32,7 +43,7 @@ export class ProjectsService {
         this.storageService.uploadFile(
           userId,
           file,
-          `${userId}/projects/${dto.title}`,
+          `${userId}/projects/${this.normalizeRoute(dto.title)}`,
         ),
       ),
     );
@@ -211,7 +222,7 @@ export class ProjectsService {
             this.storageService.uploadFile(
               userId,
               file,
-              `${userId}/projects/${project.title}`,
+              `${userId}/projects/${this.normalizeRoute(project.title)}`,
             ),
           ),
         )
@@ -241,7 +252,7 @@ export class ProjectsService {
         imagesPath: finalPaths,
         imagesUrl: finalUrls,
         highlight: dto.highlight,
-        role: dto.role
+        role: dto.role,
       },
     });
 
@@ -263,7 +274,7 @@ export class ProjectsService {
     return Data;
   }
 
-    async getNames(userId: string) {
+  async getNames(userId: string) {
     return this.prisma.project.findMany({
       where: {
         userId: userId,
